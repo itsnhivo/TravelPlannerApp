@@ -9,7 +9,32 @@ import SwiftUI
 
 struct rewardsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Rewards")
+            .font(.title)
+            .fontWeight(.bold)
+            .frame(maxWidth:.infinity)
+            .background(Color.green)
+        ScrollView{
+            VStack{
+                ForEach(1..<10){ index in
+                    ZStack{
+                        Rectangle()
+                            .fill(Color.pink)
+                            .frame(width: 360.0, height: 160.0)
+                            .cornerRadius(15)
+                        HStack{
+                            Circle()
+                                .fill(Color.blue)
+                                .frame(width:120)
+                                .offset(x:-80)
+                            Text("text")
+                                .multilineTextAlignment(.leading)
+                        }
+                        
+                    }
+                }
+            }
+        }
     }
 }
 

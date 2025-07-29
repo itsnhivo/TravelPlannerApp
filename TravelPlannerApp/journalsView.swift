@@ -9,7 +9,11 @@ import SwiftUI
 
 struct journalsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Rewards")
+            .font(.title)
+            .fontWeight(.bold)
+            .frame(maxWidth:.infinity)
+            .background(Color.green)
     }
 }
 
