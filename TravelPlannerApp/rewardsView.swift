@@ -13,18 +13,18 @@ struct rewardsView: View {
             .font(.title)
             .fontWeight(.bold)
             .frame(maxWidth:.infinity)
-            .background(Color.green)
+            .background(Color.gray)
         ScrollView{
             VStack{
                 ForEach(1..<10){ index in
                     ZStack{
                         Rectangle()
-                            .fill(Color.pink)
+                            .fill(Color.black)
                             .frame(width: 360.0, height: 160.0)
                             .cornerRadius(15)
                         HStack{
                             Circle()
-                                .fill(Color.blue)
+                                .fill(Color.white)
                                 .frame(width:120)
                                 .offset(x:-80)
                             Text("text")
