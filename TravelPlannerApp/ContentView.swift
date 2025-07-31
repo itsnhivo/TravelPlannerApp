@@ -11,8 +11,8 @@ struct ContentView: View {
     var body: some View {
         NavigationStack{
             VStack{
-                NavigationLink(destination: rewardsView()){
-                    Text("Rewards")
+                NavigationLink(destination: trip1view()){
+                    Text("trip")
                 }
                 NavigationLink(destination: journalsView()){
                     Text("Journals")
