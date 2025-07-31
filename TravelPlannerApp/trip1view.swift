@@ -5,12 +5,21 @@ struct Trip: Identifiable {
     let name: String
 }
 
-struct TripsView: View {
-    @State private var trips: [Trip] = [
+class TripStore: ObservableObject {
+    static let shared = TripStore()
+    @Published var trips: [Trip] = [
         Trip(name: "1"),
         Trip(name: "2"),
         Trip(name: "3")
     ]
+    func addTrip() {
+            let newTripNumber = trips.count + 1
+            trips.append(Trip(name: "\(newTripNumber)"))
+        }
+}
+
+struct TripsView: View {
+    @ObservedObject var tripStore = TripStore.shared
 
     var body: some View {
         NavigationView {
@@ -24,14 +33,13 @@ struct TripsView: View {
                 // Scrollable content
                 ScrollView {
                     LazyVGrid(columns: [GridItem(), GridItem()], spacing: 20) {
-                        ForEach(trips) { trip in
+                        ForEach(tripStore.trips) { trip in
                             TripCard(title: trip.name)
                         }
 
                         // Add button
                         Button(action: {
-                            let newTripNumber = trips.count + 1
-                            trips.append(Trip(name: "\(newTripNumber)"))
+                            tripStore.addTrip()
                         }) {
                             TripCard(title: "+")
                         }
