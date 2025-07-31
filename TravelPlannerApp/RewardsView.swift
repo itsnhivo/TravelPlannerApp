@@ -1,47 +1,82 @@
 //
-//  Rewards.swift
+//  rewardsView.swift
 //  TravelPlannerApp
 //
-//  Created by Scholar on 7/29/25.
+//  Created by Yueqing Cai on 7/29/25.
 //
 
 import SwiftUI
 
 struct RewardsView: View {
-    @Binding var selectedTab: TabSelection
+    let rewards = [
+        CosmeticReward(name: "Vintage Luggage", imageName: "luggage"),
+        CosmeticReward(name: "Compass Pin", imageName: "compass"),
+        CosmeticReward(name: "World Map Skin", imageName: "map"),
+        CosmeticReward(name: "Passport Sticker", imageName: "passport"),
+        CosmeticReward(name: "Airplane Icon", imageName: "airplane"),
+        CosmeticReward(name: "Traveler Badge", imageName: "badge")
+    ]
     
-    let rewards: [CosmeticReward] = [
-        CosmeticReward(name: "Hawaii Profile Picture", imageName: "hawaii"),
-        CosmeticReward(name: "China Profile Picture", imageName: "china"),
-        CosmeticReward(name: "Russia Profile Picture", imageName: "russia")]
     var body: some View {
-        NavigationView {
+        VStack(spacing: 0) {
+            Text("Your Rewards")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.appDarkBlue)
+                .padding(.top, 20)
+                .padding(.bottom, 10)
+            
             ScrollView {
-                VStack(spacing: 15) {
+                VStack(spacing: 20) {
                     ForEach(rewards) { reward in
-                        HStack(spacing: 30) {
-                            Image(reward.imageName)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 50, height: 50)
-                                .clipped()
-                                .foregroundColor(.blue)
-                            Text(reward.name)
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                            Spacer()
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
+                        RewardCard(reward: reward)
                     }
                 }
-                .padding(.horizontal)
+                .padding()
             }
         }
+        .background(Color.appLightBlue.ignoresSafeArea())
+    }
+}
+
+struct RewardCard: View {
+    let reward: CosmeticReward
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            Image(systemName: reward.imageName) 
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+                .foregroundColor(.appBlue)
+                .padding(10)
+                .background(Color.appTeal.opacity(0.4))
+                .clipShape(Circle())
+            
+            VStack(alignment: .leading, spacing: 5) {
+                Text(reward.name)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.appDarkBlue)
+                
+                Text("Achieved for completing a trip!")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "checkmark.circle.fill")
+                .font(.title)
+                .foregroundColor(.green)
+        }
+        .padding()
+        .background(Color.appCream)
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
     }
 }
 
 #Preview {
-    RewardsView(selectedTab: .constant(.rewards))
+    RewardsView()
 }
