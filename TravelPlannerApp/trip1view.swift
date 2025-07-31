@@ -50,22 +50,28 @@ struct TripsView: View {
                 // Bottom Tab Bar
                 HStack {
                     Spacer()
+                    NavigationLink (destination: Rewards()) {
                     VStack {
                         Image(systemName: "star")
                         Text("Rewards")
                             .font(.caption)
+                        }
                     }
                     Spacer()
-                    VStack {
-                        Image(systemName: "book")
-                        Text("Journals")
-                            .font(.caption)
+                    NavigationLink(destination: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Destination@*/Text("Destination")/*@END_MENU_TOKEN@*/) {
+                        VStack {
+                            Image(systemName: "book")
+                            Text("Journals")
+                                .font(.caption)
+                        }
                     }
                     Spacer()
-                    VStack {
-                        Image(systemName: "person")
-                        Text("Profile")
-                            .font(.caption)
+                    NavigationLink (destination: Profile(userData: UserData(username: "", password: ""))) {
+                        VStack {
+                            Image(systemName: "person")
+                            Text("Profile")
+                                .font(.caption)
+                        }
                     }
                     Spacer()
                 }

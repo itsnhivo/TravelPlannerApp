@@ -52,6 +52,7 @@ struct SignUp: View {
                     trip1view()
                 }
             }
+            .navigationBarBackButtonHidden(true)
             .padding(.all, 35.0)
         }
     }
