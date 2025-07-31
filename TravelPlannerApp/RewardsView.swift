@@ -6,13 +6,10 @@
 //
 
 import SwiftUI
-struct CosmeticReward: Identifiable {
-    let id = UUID()
-    let name: String
-    let imageName: String
-}
 
-struct Rewards: View {
+struct RewardsView: View {
+    @Binding var selectedTab: TabSelection
+    
     let rewards: [CosmeticReward] = [
         CosmeticReward(name: "Hawaii Profile Picture", imageName: "hawaii"),
         CosmeticReward(name: "China Profile Picture", imageName: "china"),
@@ -41,23 +38,10 @@ struct Rewards: View {
                 }
                 .padding(.horizontal)
             }
-            .navigationTitle("Rewards")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.backward")
-                            Text("Back")
-                        }
-                    }
-                }
-            }
         }
     }
 }
 
 #Preview {
-    Rewards()
+    RewardsView(selectedTab: .constant(.rewards))
 }
