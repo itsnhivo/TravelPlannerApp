@@ -1,3 +1,10 @@
+//
+//  trip1view.swift
+//  TravelPlannerApp
+//
+//  Created by Joyce Yang on 7/29/25.
+//
+
 import SwiftUI
 
 struct Trip: Identifiable {
