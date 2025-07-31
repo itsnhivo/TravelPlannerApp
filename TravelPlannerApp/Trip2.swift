@@ -1,10 +1,3 @@
-//
-//  Trip2.swift
-//  TravelPlannerApp
-//
-//  Created by Joyce Yang on 7/30/25.
-//
-
 import SwiftUI
 
 struct TrailStop: Identifiable {
@@ -116,10 +109,9 @@ struct DottedTrailView: View {
                         }
                     }
                 )
-                .onChange(of: stops.count) { _ in
-                    // Auto-scroll to last stop when a new one is added
+                .onChange(of: stops.count) {
                     if let lastIndex = stops.indices.last {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        DispatchQueue.main.async {
                             withAnimation {
                                 proxy.scrollTo(lastIndex, anchor: .center)
                             }
