@@ -1,3 +1,10 @@
+//
+//  Trip2.swift
+//  TravelPlannerApp
+//
+//  Created by Joyce Yang on 7/30/25.
+//
+
 import SwiftUI
 
 struct TrailStop: Identifiable {
