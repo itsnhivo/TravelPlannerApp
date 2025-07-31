@@ -14,6 +14,7 @@ struct DottedTrailView: View {
         TrailStop(position: CGPoint(x: 250, y: 210), label: "Stop 2"),
         TrailStop(position: CGPoint(x: 120, y: 320), label: "Stop 3")
     ]
+    @State private var currentScrollIndex: Int = 0
     // Positioning constants
     private let leftX: CGFloat = 120
     private let rightX: CGFloat = 250
@@ -23,32 +24,102 @@ struct DottedTrailView: View {
     var body: some View {
         ZStack {
             Color(hex: "#EFFFFD").ignoresSafeArea()
-            // Dotted trail line
-            TrailPath(points: stops.map { $0.position })
-                .stroke(style: StrokeStyle(lineWidth: 2, dash: [5, 5]))
-                .foregroundColor(Color(hex: "#437995"))
-            // Stop icons + editable boxes
-            ForEach(Array(stops.enumerated()), id: \.1.id) { index, stop in
-                VStack(spacing: 4) {
-                    Image(systemName: "mappin.circle.fill")
-                        .font(.title)
-                        .foregroundColor(Color(hex: "#DA4453"))
-                    HStack {
-                        TextField("Edit stop", text: $stops[index].label)
-                            .padding(5)
-                        Button(action: {
-                            stops.remove(at: index)
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
+            ScrollViewReader { proxy in
+                ScrollView(.vertical, showsIndicators: false) {
+                    ZStack {
+                        // Dotted trail line
+                        TrailPath(points: stops.map { $0.position })
+                            .stroke(style: StrokeStyle(lineWidth: 2, dash: [5, 5]))
+                            .foregroundColor(Color(hex: "#437995"))
+                        // Stop icons + editable boxes
+                        ForEach(Array(stops.enumerated()), id: \.0) { index, stop in
+                            VStack(spacing: 4) {
+                                Image(systemName: "mappin.circle.fill")
+                                    .font(.title)
+                                    .foregroundColor(Color(hex: "#DA4453"))
+                                HStack {
+                                    TextField("Edit stop", text: $stops[index].label)
+                                        .padding(5)
+                                    Button(action: {
+                                        stops.remove(at: index)
+                                        // Adjust scroll index if needed
+                                        if currentScrollIndex >= stops.count {
+                                            currentScrollIndex = max(0, stops.count - 1)
+                                        }
+                                    }) {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                                .frame(width: 140, height: 50)
+                                .background(Color.white)
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(hex: "#437995")))
+                                .cornerRadius(10)
+                            }
+                            .position(stop.position)
+                            .id(index) // Use index for easier scroll control
                         }
                     }
-                    .frame(width: 140, height: 50)
-                    .background(Color.white)
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(hex: "#437995")))
-                    .cornerRadius(10)
+                    .frame(height: (startY + CGFloat(stops.count) * verticalSpacing + 400)) // Extra space for over-scroll
+                    .padding(.top, 200) // Extra space at top
+                    .padding(.bottom, 200) // Extra space at bottom
                 }
-                .position(stop.position)
+                .overlay(
+                    // Scroll up and down buttons
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            VStack(spacing: 16) {
+                                Button(action: {
+                                    // Scroll up by 1
+                                    let newIndex = max(currentScrollIndex - 1, 0)
+                                    if stops.indices.contains(newIndex) {
+                                        withAnimation {
+                                            proxy.scrollTo(newIndex, anchor: .center)
+                                        }
+                                        currentScrollIndex = newIndex
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.up.circle.fill")
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                        .foregroundColor(Color(hex: "#437995"))
+                                        .shadow(radius: 4)
+                                }
+                                Button(action: {
+                                    // Scroll down by 1
+                                    let newIndex = min(currentScrollIndex + 1, stops.count - 1)
+                                    if stops.indices.contains(newIndex) {
+                                        withAnimation {
+                                            proxy.scrollTo(newIndex, anchor: .center)
+                                        }
+                                        currentScrollIndex = newIndex
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.down.circle.fill")
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                        .foregroundColor(Color(hex: "#437995"))
+                                        .shadow(radius: 4)
+                                }
+                            }
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 80)
+                        }
+                    }
+                )
+                .onChange(of: stops.count) { _ in
+                    // Auto-scroll to last stop when a new one is added
+                    if let lastIndex = stops.indices.last {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation {
+                                proxy.scrollTo(lastIndex, anchor: .center)
+                            }
+                            currentScrollIndex = lastIndex
+                        }
+                    }
+                }
             }
             // Editable trip name & back button
             VStack {
