@@ -114,7 +114,7 @@ struct journalEdit: View {
 
     var body: some View {
         NavigationView{
-            TextEditor(text: $text)
+            TextField("How was the trip?", text: $text)
                 .frame(minHeight: 200)
                 .padding(8)
                 .background(Color.gray.opacity(0.1))
